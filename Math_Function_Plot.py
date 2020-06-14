@@ -6,13 +6,14 @@ Created on Sat Jun 13 12:25:38 2020
 """
 
 import matplotlib.pyplot as plt
-from tkinter import messagebox
 import math
 import sys
 if sys.version_info[0] < 3:
     import Tkinter as tk
+    from Tkinter import messagebox
 else:
     import tkinter as tk
+    from tkinter import messagebox
 
 #Create Window
     
@@ -69,20 +70,20 @@ def plot(x, y):
 def cos():
     x = x_val()
     if x is not None:
-      y = [math.cos(j) for j in x]
+      y = [math.cos(math.radians(j)) for j in x]
       plot(x,y)      
 
     
 def sin():
     x = x_val()
     if x is not None:
-      y = [math.sin(j) for j in x]
+      y = [math.sin(math.radians(j)) for j in x]
       plot(x,y)   
     
 def tan():
     x = x_val()
     if x is not None:
-      y = [math.tan(j) for j in x]
+      y = [math.tan(math.radians(j)) for j in x]
       plot(x,y)   
     
 def exp():
@@ -116,13 +117,13 @@ def clear():
     plt.close()
     txt.delete(0, 'end')
 
-btn = tk.Button(frame2, text="cos", width=7, height=2, command=cos)
+btn = tk.Button(frame2, text="cos(deg)", width=7, height=2, command=cos)
 btn.grid(row=2, column=0, padx=2, pady=2)
 
-btn = tk.Button(frame2, text="sin", width=7, height=2, command=sin)
+btn = tk.Button(frame2, text="sin(deg)", width=7, height=2, command=sin)
 btn.grid(row=2, column=1, padx=2, pady=2)
     
-btn = tk.Button(frame2, text="tan", width=7, height=2, command=tan)
+btn = tk.Button(frame2, text="tan(deg)", width=7, height=2, command=tan)
 btn.grid(row=2, column=2, padx=2, pady=2)
     
 btn = tk.Button(frame2, text="exp", width=7, height=2, command=exp)
