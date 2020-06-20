@@ -45,18 +45,18 @@ txt = tk.Entry(frame2, width=30, highlightbackground='#000000', highlightthickne
 txt.grid(row=1, column=0, columnspan=20, pady=5)
 txt.focus()
 
-#Functions for different inputs
+#Function for validating and generating x-values for all functions except own function
 
 def x_val():
     '''Function to check input value and generate x for calculating y'''
     try:
         x = int(txt.get())
-        if x<=700:
+        if x<=700 and x>=0:
             return [i for i in range(x)]
         else:
-            return None
-    except:
-        messagebox.showinfo("Error", "Please enter a valid integer")
+            raise Exception
+    except Exception:
+        messagebox.showinfo("Error", "Please enter a positive integer in range 0 to 700 both inclusive")
         return None
         
 def plot(x, y):
@@ -66,6 +66,7 @@ def plot(x, y):
     plt.plot(x,y, label='Graph')
     plt.show()
     
+#Defining functions for buttons
 
 def cos():
     x = x_val()
@@ -98,10 +99,10 @@ def sqrt():
         y = [math.sqrt(j) for j in x]
         plot(x,y)   
     
-def log2():
+def log():
     if x_val() is not None:
         x = [val for val in x_val() if val>0]
-        y = [math.log2(j) for j in x]
+        y = [math.log(j) for j in x]
         plot(x,y)   
     
 def erf():
@@ -109,13 +110,31 @@ def erf():
     if x is not None:
       y = [math.erf(j) for j in x]
       plot(x,y)   
-
+      
+def own():
+    dic = {'log':math.log, 'e':math.exp, 'sqrt':math.sqrt}
+    y=[]
+    expr = txt.get()
+    try:
+        if 'x' not in expr:
+            raise Exception
+            
+        for x in range(1,401):
+            dic['x'] = x
+            y.append(eval(expr, {'__builtins__()':None}, dic))
+        x = range(1,401)
+        plot(x,y)
+    except Exception:
+         messagebox.showinfo("Error", "Please enter a valid expression in lower case 'x' containing:\n1. x\n2. log(x)\n3. e(x)\n4. sqrt(x)\n5. x**n (n is any integer)")
+        
 def exit1():
     window.destroy()
-
+    
 def clear():
     plt.close()
     txt.delete(0, 'end')
+    
+#Creating Buttons
 
 btn = tk.Button(frame2, text="cos(deg)", width=7, height=2, command=cos)
 btn.grid(row=2, column=0, padx=2, pady=2)
@@ -132,17 +151,20 @@ btn.grid(row=3, column=0, padx=2, pady=2)
 btn = tk.Button(frame2, text="sqrt", width=7, height=2, command=sqrt)
 btn.grid(row=3, column=1, padx=2, pady=2)
     
-btn = tk.Button(frame2, text="log2", width=7, height=2, command=log2)
+btn = tk.Button(frame2, text="log", width=7, height=2, command=log)
 btn.grid(row=3, column=2, padx=2, pady=2)
     
 btn = tk.Button(frame2, text="erf", width=7, height=2, command=erf)
 btn.grid(row=4, column=0, padx=2, pady=2)
 
-btn = tk.Button(frame2, text="clear", width=16, height=2, command=clear)
-btn.grid(row=4, column=1, columnspan=2, padx=2, pady=2)
+btn = tk.Button(frame2, text="f(x)", width=7, height=2, command=own)
+btn.grid(row=4, column=1, padx=2, pady=2)
+
+btn = tk.Button(frame2, text="clear", width=7, height=2, command=clear)
+btn.grid(row=4, column=2, columnspan=2, padx=2, pady=2)
 
 btn = tk.Button(frame2, text="exit", width=26, height=2, command=exit1)
 btn.grid(row=5, column=0, columnspan=3, pady=5, padx=2)
         
-
+#main function for tkinter GUI
 window.mainloop()
